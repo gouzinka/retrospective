@@ -1,0 +1,168 @@
+@font-face {
+	font-family: 'ZenMaruGothic';
+	src: url('/fonts/zenMaruGothic/ZenMaruGothic-Light.ttf') format('truetype');
+	font-weight: 300;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'ZenMaruGothic';
+	src: url('/fonts/zenMaruGothic/ZenMaruGothic-Regular.ttf') format('truetype');
+	font-weight: 400;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'ZenMaruGothic';
+	src: url('/fonts/zenMaruGothic/ZenMaruGothic-Medium.ttf') format('truetype');
+	font-weight: 500;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'ZenMaruGothic';
+	src: url('/fonts/zenMaruGothic/ZenMaruGothic-Bold.ttf') format('truetype');
+	font-weight: 700;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'ZenMaruGothic';
+	src: url('/fonts/zenMaruGothic/ZenMaruGothic-Black.ttf') format('truetype');
+	font-weight: 900;
+	font-style: normal;
+}
+
+:root {
+	--font-body: 'ZenMaruGothic', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+		Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+	--font-mono: 'Fira Mono', monospace;
+	--color-bg-0: rgb(202, 216, 228);
+	--color-bg-1: hsl(209, 36%, 86%);
+	--color-bg-2: hsl(224, 44%, 95%);
+	--color-theme-1: #ff3e00;
+	--color-theme-2: #4075a6;
+	--color-text: rgba(0, 0, 0, 0.7);
+	--column-width: 42rem;
+	--column-margin-top: 4rem;
+	font-family: var(--font-body);
+	color: var(--color-text);
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	min-height: 100dvh;
+	margin: 0;
+	background-color: #f6f8fa;
+	display: flex;
+}
+
+h1,
+h2,
+p {
+	font-weight: 400;
+}
+
+p {
+	line-height: 1.5;
+}
+
+a {
+	color: var(--color-theme-1);
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+h1 {
+	font-size: 2rem;
+	text-align: center;
+}
+
+h2 {
+	font-size: 1rem;
+}
+
+pre {
+	font-size: 16px;
+	font-family: var(--font-mono);
+	background-color: rgba(255, 255, 255, 0.45);
+	border-radius: 3px;
+	box-shadow: 2px 2px 6px rgb(255 255 255 / 25%);
+	padding: 0.5em;
+	overflow-x: auto;
+	color: var(--color-text);
+}
+
+.text-column {
+	display: flex;
+	max-width: 48rem;
+	flex: 0.6;
+	flex-direction: column;
+	justify-content: center;
+	margin: 0 auto;
+}
+
+input,
+button {
+	font-size: inherit;
+	font-family: inherit;
+}
+
+button:focus:not(:focus-visible) {
+	outline: none;
+}
+
+@media (min-width: 720px) {
+	h1 {
+		font-size: 2.4rem;
+	}
+}
+
+.visually-hidden {
+	border: 0;
+	clip: rect(0 0 0 0);
+	height: auto;
+	margin: 0;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
+	white-space: nowrap;
+}
+
+:root {
+	--elastic-out: linear(
+		0,
+		0.2178 2.1%,
+		1.1144 8.49%,
+		1.2959 10.7%,
+		1.3463 11.81%,
+		1.3705 12.94%,
+		1.3726,
+		1.3643 14.48%,
+		1.3151 16.2%,
+		1.0317 21.81%,
+		0.941 24.01%,
+		0.8912 25.91%,
+		0.8694 27.84%,
+		0.8698 29.21%,
+		0.8824 30.71%,
+		1.0122 38.33%,
+		1.0357,
+		1.046 42.71%,
+		1.0416 45.7%,
+		0.9961 53.26%,
+		0.9839 57.54%,
+		0.9853 60.71%,
+		1.0012 68.14%,
+		1.0056 72.24%,
+		0.9981 86.66%,
+		1
+	);
+}
