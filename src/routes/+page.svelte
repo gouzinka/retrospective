@@ -210,17 +210,6 @@
 		color: #333c2b;
 	}
 
-	@keyframes typewriter {
-		0%,
-		100% {
-			width: 0;
-		}
-		20%,
-		80% {
-			width: 220px;
-		}
-	}
-
 	@keyframes caret {
 		0%,
 		100% {
@@ -237,12 +226,13 @@
 		white-space: nowrap;
 		display: inline-block;
 		position: relative;
+		animation-fill-mode: forwards;
 		animation-duration: 10s;
 		animation-timing-function: steps(30, end);
 	}
 
 	.text-reveal {
-		animation: typewriter;
+		animation-name: typewriter;
 	}
 
 	.text-reveal::after,
@@ -258,23 +248,30 @@
 	}
 
 	.text-reveal-line-2 {
-		overflow: hidden;
-		white-space: nowrap;
-		animation: typewriter-line-2;
-		display: inline-block;
-		position: relative;
-		animation-duration: 10s;
-		animation-timing-function: steps(30, end);
+		width: 0;
+		animation-name: typewriter-line-2;
+		animation-delay: 3s;
+		animation-fill-mode: forwards;
 	}
 
 	@keyframes typewriter-line-2 {
-		0%,
+		0% {
+			width: 0;
+		}
+		20%,
+		80%,
 		100% {
+			width: 205px;
+		}
+	}
+
+	@keyframes typewriter {
+		0% {
 			width: 0;
 		}
 		20%,
 		80% {
-			width: 205px;
+			width: 222px;
 		}
 	}
 

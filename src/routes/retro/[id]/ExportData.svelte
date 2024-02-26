@@ -1,49 +1,45 @@
-<script>
-	export let retrospective;
+<script lang="ts">
+	import type { ActionPoint, Card, Board, Retrospective } from '../../../types';
 
-	function exportData() {
-		const formattedData = formatDataAsString();
+	export let retrospective: Retrospective;
 
-		const blob = new Blob([formattedData], { type: 'text/plain' });
+	function formatDataAsString(retrospective: Retrospective): string {
+		const formatDate = (dateString: string) => new Date(dateString).toLocaleString();
+		const formatBoard = (board: Board) =>
+			`${board.title}:\n${board.cards
+				.filter((card: Card) => card.content.length > 0)
+				.map((card) => card.content)
+				.join('\n')}`;
+		const formatActionPoints = (actionPoints: ActionPoint[]) =>
+			actionPoints.map((actionPoint) => actionPoint.description).join('\n');
+
+		const date = formatDate(retrospective.createdAt.toLocaleString());
+		const boardsString = retrospective.boards.map(formatBoard).join('\n\n');
+		const actionsString = formatActionPoints(retrospective.actionPoints);
+
+		return `Retrospective ${date}\n\n${boardsString}\n\nAction points:\n${actionsString}`;
+	}
+
+	function triggerFileDownload(filename: string, content: string) {
+		const blob = new Blob([content], { type: 'text/plain' });
 		const url = URL.createObjectURL(blob);
-
 		const link = document.createElement('a');
-		link.download = 'retrospective.txt';
+
+		link.download = filename;
 		link.href = url;
-
 		document.body.appendChild(link);
-
 		link.click();
-
 		document.body.removeChild(link);
 		URL.revokeObjectURL(url);
 	}
 
-	function formatDataAsString() {
-		const date = new Date(retrospective?.createdAt).toLocaleString();
-
-		const boardsString = (retrospective?.boards || [])
-			.map((board) => {
-				const boardTitle = board.title;
-				const cardsString = (board.cards || [])
-					.filter((card) => card.content?.length > 0)
-					.map((card) => card.content)
-					.join('\n');
-				return `${boardTitle}:\n${cardsString}`;
-			})
-			.join('\n\n');
-
-		const actionsString = (retrospective.actionPoints || [])
-			.map((actionPoint) => actionPoint.description)
-			.join('\n');
-
-		const formattedString = `Retrospective ${date}\n\n${boardsString}\n\nAction points:\n${actionsString}`;
-
-		return formattedString;
+	function exportData() {
+		const formattedData = formatDataAsString(retrospective);
+		triggerFileDownload('retrospective.txt', formattedData);
 	}
 </script>
 
-<button on:click={exportData}><strong>&#10515;</strong></button>
+<button data-testid="download-btn" on:click={exportData}><strong>&#10515;</strong></button>
 
 <style>
 	button {

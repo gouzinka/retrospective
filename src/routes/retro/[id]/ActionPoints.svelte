@@ -1,8 +1,9 @@
-<script>
+<script lang="ts">
 	import { io } from '$lib/socket.js';
 	import { quintOut } from 'svelte/easing';
 	import { crossfade } from 'svelte/transition';
 	import { flip } from 'svelte/animate';
+	import type { ActionPoint } from '../../../types';
 
 	const [send, receive] = crossfade({
 		fallback(node, params) {
@@ -21,9 +22,9 @@
 	});
 
 	export let visible = false;
-	export let retroId;
+	export let retroId: string;
 	let newActionDescription = '';
-	export let actionPoints;
+	export let actionPoints: ActionPoint[];
 	let input;
 
 	function addNewActionPoint() {
@@ -32,14 +33,14 @@
 			newActionDescription = '';
 		}
 	}
-	function handleKeydown(event) {
+	function handleKeydown(event: KeyboardEvent) {
 		if (event.key === 'Enter' && !event.shiftKey) {
 			event.preventDefault();
 			addNewActionPoint();
 		}
 	}
 
-	async function saveActionPoint(description) {
+	async function saveActionPoint(description: string) {
 		io.emit('add-action-point-request', {
 			description: description.trim(),
 			retrospectiveId: retroId
@@ -71,7 +72,7 @@
 		</div>
 		{#if actionPoints?.length > 0}
 			<ul>
-				{#each actionPoints as actionPoint (actionPoint)}
+				{#each actionPoints as actionPoint (actionPoint.id)}
 					<li in:receive={{ key: actionPoint.id }} out:send={{ key: actionPoint.id }} animate:flip>
 						{actionPoint.description}
 					</li>

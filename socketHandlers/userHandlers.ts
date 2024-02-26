@@ -1,6 +1,7 @@
 import prisma from '../db.js';
+import type { Socket, Server } from 'socket.io';
 
-export function handleUserEvents(socket, io) {
+export function handleUserEvents(socket: Socket, io: Server) {
 	socket.on('create-user', async () => {
 		const user = await prisma.user.create({
 			data: { name: getRandomName(), customColor: getRandomColor() }
@@ -8,17 +9,17 @@ export function handleUserEvents(socket, io) {
 		io.emit('set-user', user);
 	});
 
-	socket.on('update-user', async (data) => {
+	socket.on('update-user', async (data: { id: string; name: string }) => {
 		const { id, name } = data;
 		const updatedUser = await prisma.user.update({
-			where: { id: parseInt(id) },
+			where: { id: id },
 			data: { name }
 		});
 		io.emit('set-user', updatedUser);
 	});
 }
 
-function getRandomName() {
+function getRandomName(): string {
 	const adjectives = [
 		'Zádumčivý',
 		'Unavený',
@@ -35,13 +36,13 @@ function getRandomName() {
 	];
 	const nouns = ['Bulbasaur', 'Cubone', 'Pikachu', 'Mimikyu', 'Bambula'];
 
-	const randomAdjective = adjectives[Math.floor(Math.random() * adjectives.length)];
-	const randomNoun = nouns[Math.floor(Math.random() * nouns.length)];
+	const randomAdjective = getRandomItem(adjectives);
+	const randomNoun = getRandomItem(nouns);
 
 	return `${randomAdjective} ${randomNoun}`;
 }
 
-function getRandomColor() {
+function getRandomColor(): string {
 	const colors = [
 		'#e2ffbf',
 		'#ffe5da',
@@ -59,5 +60,9 @@ function getRandomColor() {
 		'#efca9c'
 	];
 
-	return colors[Math.floor(Math.random() * colors.length)];
+	return getRandomItem(colors);
+}
+
+function getRandomItem(options: string[]): string {
+	return options[Math.floor(Math.random() * options.length)];
 }

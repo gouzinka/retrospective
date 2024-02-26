@@ -1,10 +1,10 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte';
 	import { io } from '$lib/socket.js';
 
-	export let retroId;
-	let timerValue = 300;
-	let isRunning = false;
+	export let retroId: string;
+	let timerValue: number = 300;
+	let isRunning: boolean = false;
 
 	onMount(() => {
 		io.emit('join', retroId);

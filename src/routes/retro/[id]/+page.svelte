@@ -1,35 +1,37 @@
-<script>
-	import { retrospective } from '../../../stores/retrospective.js';
-	import { currentUser } from '../../../stores/user.js';
+<script lang="ts">
+	import { retrospective } from '../../../stores/retrospective';
+	import { currentUser } from '../../../stores/user';
 	import ActionPoints from './ActionPoints.svelte';
 	import ExportData from './ExportData.svelte';
 	import Board from './Board.svelte';
 	import Header from '../../Header.svelte';
 	import Timer from './Timer.svelte';
-	import { updateUser } from '../../../utils/userManager.js';
+	import { updateUser } from '../../../utils/userManager';
 
-	let actionsVisible = false;
-	let isEditingName = false;
+	let actionsVisible: boolean = false;
+	let isEditingName: boolean = false;
 	$: userName = $currentUser?.name ?? '';
-	let userNameTitle = $currentUser?.name ?? '';
+	let userNameTitle: string = $currentUser?.name ?? '';
 	$: boards = $retrospective?.boards;
 
-	function handleKeydown(event) {
+	function handleKeydown(event: KeyboardEvent): void {
 		if (event.key === 'Enter' || event.keyCode === 13) {
 			event.preventDefault();
-			event.target.blur();
+			(event.target as HTMLInputElement).blur();
 		}
 	}
 
-	function handleOnBlur() {
+	function handleOnBlur(): void {
 		isEditingName = false;
-		updateUser($currentUser?.id, userNameTitle);
+		if ($currentUser?.id) {
+			updateUser($currentUser.id, userNameTitle);
+		}
 	}
 </script>
 
 <svelte:head>
 	<title>
-		Retro | {$retrospective ? new Date($retrospective?.createdAt).toLocaleDateString('en-GB') : ''}
+		Retro | {$retrospective ? new Date($retrospective.createdAt).toLocaleDateString('en-GB') : ''}
 	</title>
 </svelte:head>
 
@@ -76,8 +78,8 @@
 					title={board.title}
 					boardId={board.id}
 					cards={board.cards}
-					color={$currentUser?.customColor}
-					userId={$currentUser?.id}
+					color={$currentUser?.customColor ?? ''}
+					userId={$currentUser?.id ?? ''}
 				/>
 			{/each}
 		{:else}

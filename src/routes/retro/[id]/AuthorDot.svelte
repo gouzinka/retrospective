@@ -1,9 +1,9 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte';
 
-	export let name;
-	let author;
-	let fullNameWidth;
+	export let name: string;
+	let author: HTMLParagraphElement;
+	let fullNameWidth: string;
 	let displayName = name ?? '';
 
 	onMount(() => {
@@ -48,7 +48,7 @@
 	on:blur={handleMouseOut}
 	style="--full-width: {fullNameWidth};"
 >
-	<p bind:this={author}>
+	<p bind:this={author} data-testid="name-display">
 		{displayName}
 	</p>
 </div>

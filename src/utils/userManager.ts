@@ -1,16 +1,21 @@
 import { io } from '$lib/socket.js';
+import type { User } from '../types';
 
 export function getUserFromLocalStorage() {
 	if (typeof window === 'undefined') return null;
+
 	const userData = localStorage.getItem('user');
+
 	if (userData) {
 		return JSON.parse(userData);
 	}
+
 	return null;
 }
 
-export function saveUserToLocalStorage(user) {
+export function saveUserToLocalStorage(user: User) {
 	if (typeof window === 'undefined') return null;
+
 	localStorage.setItem('user', JSON.stringify(user));
 }
 
@@ -40,6 +45,6 @@ export async function createUser() {
 	});
 }
 
-export async function updateUser(id, name) {
+export async function updateUser(id: string, name: string) {
 	io.emit('update-user', { id, name });
 }

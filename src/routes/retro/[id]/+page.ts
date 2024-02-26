@@ -9,7 +9,7 @@ export async function load({ params }) {
 	io.emit('set-retrospective', id);
 
 	if (typeof window !== 'undefined') {
-		const user = await setCurrentUser();
+		await setCurrentUser();
 		io.emit('join-retrospective', id);
 	}
 }

@@ -1,11 +1,13 @@
-<script>
-	import Section from './Section.svelte';
-	export let retroId;
-	export let title;
-	export let boardId;
-	export let cards;
-	export let color;
-	export let userId;
+<script lang="ts">
+	import BoardSection from './BoardSection.svelte';
+	import type { Card } from '../../../types';
+
+	export let retroId: string;
+	export let title: string;
+	export let boardId: string;
+	export let cards: Card[];
+	export let color: string;
+	export let userId: string;
 
 	$: publicCards = cards?.filter((card) => card.isPublic) ?? [];
 	$: privateCards = cards?.filter((card) => !card.isPublic && card.authorId === userId) ?? [];
@@ -13,8 +15,16 @@
 
 <div class="board">
 	<h2 class="board-title">{title}</h2>
-	<Section {retroId} {boardId} {userId} {color} type="public" title="Public" cards={publicCards} />
-	<Section
+	<BoardSection
+		{retroId}
+		{boardId}
+		{userId}
+		{color}
+		type="public"
+		title="Public"
+		cards={publicCards}
+	/>
+	<BoardSection
 		{retroId}
 		{boardId}
 		{userId}

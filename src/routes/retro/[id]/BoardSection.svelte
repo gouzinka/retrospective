@@ -1,23 +1,24 @@
-<script>
+<script lang="ts">
 	import { flip } from 'svelte/animate';
 	import { dndzone } from 'svelte-dnd-action';
-	import Card from './Card.svelte';
+	import CardComponent from './Card.svelte';
 	import { io } from '$lib/socket.js';
-	const flipDurationMs = 200;
-	export let retroId;
-	export let title;
-	export let type;
-	export let cards = [];
-	export let color;
-	export let boardId;
-	export let userId;
+	import type { Card as CardType } from '../../../types';
 
-	function handleSave(event) {
+	const flipDurationMs = 200;
+	export let retroId: string;
+	export let title: string;
+	export let type: 'private' | 'public';
+	export let cards: CardType[] = [];
+	export let color: string;
+	export let boardId: string;
+	export let userId: string;
+
+	function handleSave(event: any): void {
 		const { content, isDefaultCard, id } = event.detail;
 
 		if (content?.trim() === '' && isDefaultCard) return;
 		if (isDefaultCard) {
-			// Optimistically add the new card to the UI
 			const newCard = {
 				id: Date.now().toString(),
 				content,
@@ -37,21 +38,20 @@
 		});
 	}
 
-	function handleRemove(removedCard) {
-		// Optimistically remove the card from the UI
+	function handleRemove(removedCard: CardType): void {
 		cards = cards.filter((card) => card.id !== removedCard.id);
 		io.emit('delete-card', { retroId, cardId: removedCard.id });
 	}
 
-	function handlePublish(cardId, isPublic) {
+	function handlePublish(cardId: string, isPublic: boolean): void {
 		io.emit('toggle-publish-card', { cardId, isPublic, retroId });
 	}
 
-	function handleDndConsiderCards(e) {
+	function handleDndConsiderCards(e: CustomEvent): void {
 		cards = e.detail.items;
 	}
 
-	function handleDndFinalizeCards(e) {
+	function handleDndFinalizeCards(e: CustomEvent): void {
 		cards = e.detail.items;
 		const droppedCardId = e.detail.info.id;
 
@@ -64,7 +64,7 @@
 		}
 	}
 
-	function transformDraggedElement(draggedEl, data, index) {
+	function transformDraggedElement(draggedEl: HTMLElement): void {
 		if (!draggedEl) return;
 		draggedEl.querySelector('.card').style.transform = 'rotate(-3deg) scale(.9)';
 	}
@@ -87,8 +87,8 @@
 		on:finalize={handleDndFinalizeCards}
 	>
 		{#each cards as card (card.id)}
-			<div animate:flip={{ duration: flipDurationMs }}>
-				<Card
+			<div class="card-wrapper" animate:flip={{ duration: flipDurationMs }}>
+				<CardComponent
 					on:remove={() => handleRemove(card)}
 					on:publish={() => handlePublish(card.id, false)}
 					{card}
@@ -99,8 +99,14 @@
 		{/each}
 
 		{#if type === 'private'}
-			<Card
-				card={{ id: Date.now().toString(), content: '', isPublic: false, boardId }}
+			<CardComponent
+				card={{
+					id: Date.now().toString(),
+					content: '',
+					isPublic: false,
+					boardId,
+					authorId: userId
+				}}
 				on:save={handleSave}
 				{color}
 				isDefaultCard={true}
@@ -123,7 +129,7 @@
 
 	.public-section {
 		background: #fff;
-		flex: 1;
+		height: 700px;
 	}
 
 	.private-section {
@@ -132,12 +138,19 @@
 	}
 
 	.cards {
-		height: 280px;
+		height: calc(100% - 33px);
 		overflow-y: auto;
 		overflow-x: hidden;
 		display: flex;
 		flex-wrap: wrap;
 		gap: 9px;
 		padding-top: 15px;
+		align-content: flex-start;
+	}
+
+	.card-wrapper {
+		align-self: flex-start;
+		border: none !important;
+		background: none !important;
 	}
 </style>

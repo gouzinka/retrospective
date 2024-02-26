@@ -1,6 +1,7 @@
 import prisma from '../db.js';
+import type { Socket, Server } from 'socket.io';
 
-export function handleCardEvents(socket, io) {
+export function handleCardEvents(socket: Socket, io: Server) {
 	socket.on('save-card', async (data) => {
 		const { retroId, boardId, cardId, content, authorId, isPublic } = data;
 
@@ -45,8 +46,9 @@ export function handleCardEvents(socket, io) {
 		}
 	});
 
-	socket.on('delete-card', async () => {
+	socket.on('delete-card', async (data) => {
 		const { retroId, cardId } = data;
+
 		try {
 			const card = await prisma.card.delete({
 				where: { id: cardId }
@@ -60,6 +62,7 @@ export function handleCardEvents(socket, io) {
 
 	socket.on('toggle-publish-card', async (data) => {
 		const { cardId, isPublic, retroId } = data;
+
 		try {
 			const card = await prisma.card.update({
 				where: { id: cardId },

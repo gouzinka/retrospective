@@ -1,20 +1,25 @@
-<script>
+<script lang="ts">
 	import { onMount, createEventDispatcher } from 'svelte';
 	import AuthorDot from './AuthorDot.svelte';
+	import type { Card } from '../../../types';
 
-	const dispatch = createEventDispatcher();
+	const dispatch = createEventDispatcher<{
+		save: { content: string; isDefaultCard: boolean; id: string };
+		publish: void;
+		remove: void;
+	}>();
 
-	export let card;
-	export let isDefaultCard;
-	export let isEditing = isDefaultCard;
-	export let color;
+	export let card: Card;
+	export let isDefaultCard: boolean;
+	export let isEditing: boolean = isDefaultCard;
+	export let color: string;
 
-	let textarea;
-	let overlay;
+	let textarea: HTMLTextAreaElement;
+	let overlay: HTMLDivElement;
 	let maxCharCount = 140;
-	let charCount = card?.content?.length ?? 0;
-	let fontSize = 16;
-	let cardContent = card?.content ?? '';
+	let charCount: number = card?.content?.length ?? 0;
+	let fontSize: number = 16;
+	let cardContent: string = card?.content ?? '';
 
 	onMount(() => {
 		if (isDefaultCard) {
@@ -23,14 +28,18 @@
 		if (cardContent?.length > 0) adjustFontSize(cardContent);
 	});
 
-	function handleInput(event) {
-		charCount = event.target.value.length;
-		if (charCount > 0) adjustFontSize(event.target.value);
+	function handleInput(event: Event) {
+		const target = event.target as HTMLTextAreaElement;
+		charCount = target.value.length;
+		if (charCount > 0) adjustFontSize(target.value);
 	}
 
-	function adjustFontSize(text) {
+	function adjustFontSize(text: string): void {
 		if (!textarea) return;
-		if (text === '' || text === undefined) return (fontSize = 16);
+		if (text === '' || text === undefined) {
+			fontSize = 16;
+			return;
+		}
 
 		const maxLength = 140;
 		const minFontSize = 6;
@@ -41,45 +50,42 @@
 		);
 	}
 
-	// Prevent browser default behaviour, when text gets selected on doubleclick
-	function handleMouseDown(event) {
+	function handleMouseDown(event: MouseEvent): void {
 		event.preventDefault();
 	}
 
-	function handleDoubleclick(event) {
+	function handleDoubleclick(event: MouseEvent): void {
 		event.preventDefault();
 		toggleEditable();
 	}
 
-	function handleBlur(withSave) {
+	function handleBlur(withSave: boolean): void {
 		adjustFontSize(cardContent);
-		withSave && saveCard();
+		if (withSave) saveCard();
 		if (isDefaultCard) cardContent = '';
 	}
 
-	function blurTextarea() {
-		textarea.blur(false);
+	function blurTextarea(): void {
+		textarea.blur();
 	}
 
-	function toggleEditable() {
+	function toggleEditable(): void {
 		isEditing = !isEditing;
 		if (isEditing) {
-			// Request focus on the next tick to ensure the textarea is editable
 			setTimeout(() => {
 				textarea.focus();
 			}, 0);
 		}
 	}
 
-	function handleFocus() {
+	function handleFocus(): void {
 		if (cardContent !== undefined && cardContent !== '') {
-			// Set cursor position to the end of the text, without selecting it
 			const textLength = textarea.value.length;
 			textarea.setSelectionRange(textLength, textLength);
 		}
 	}
 
-	function handleKeydown(event) {
+	function handleKeydown(event: KeyboardEvent): void {
 		if (event.key === 'Enter' && !event.shiftKey) {
 			event.preventDefault();
 			if (isDefaultCard && cardContent.trim() === '') return;
@@ -89,15 +95,15 @@
 		}
 	}
 
-	function saveCard() {
+	function saveCard(): void {
 		dispatch('save', { content: cardContent, isDefaultCard: isDefaultCard, id: card.id });
 	}
 
-	function togglePublishCard() {
+	function togglePublishCard(): void {
 		dispatch('publish');
 	}
 
-	function removeCard() {
+	function removeCard(): void {
 		dispatch('remove');
 	}
 </script>
