@@ -1,7 +1,6 @@
 import prisma from '../db.js';
-import type { Socket, Server } from 'socket.io';
 
-export function handleCardEvents(socket: Socket, io: Server) {
+export function handleCardEvents(socket, io) {
 	socket.on('save-card', async (data) => {
 		const { retroId, boardId, cardId, content, authorId, isPublic } = data;
 

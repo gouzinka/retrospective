@@ -1,12 +1,11 @@
 import prisma from '../db.js';
-import type { Socket, Server } from 'socket.io';
 
-export function handleRetrospectiveEvents(socket: Socket, io: Server) {
-	socket.on('join-retrospective', (retroId: string) => {
+export function handleRetrospectiveEvents(socket, io) {
+	socket.on('join-retrospective', (retroId) => {
 		socket.join(`retro-${retroId}`);
 	});
 
-	socket.on('create-retrospective-request', async (data: { title: string; userId: string }) => {
+	socket.on('create-retrospective-request', async (data) => {
 		const { title, userId } = data;
 		try {
 			const creator = await prisma.user.findUnique({
@@ -63,7 +62,7 @@ export function handleRetrospectiveEvents(socket: Socket, io: Server) {
 		}
 	});
 
-	socket.on('set-retrospective', async (retroId: string) => {
+	socket.on('set-retrospective', async (retroId) => {
 		try {
 			const retrospective = await prisma.retrospective.findUnique({
 				where: { id: retroId },

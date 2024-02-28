@@ -1,7 +1,6 @@
 import prisma from '../db.js';
-import type { Socket, Server } from 'socket.io';
 
-export function handleUserEvents(socket: Socket, io: Server) {
+export function handleUserEvents(socket, io) {
 	socket.on('create-user', async () => {
 		const user = await prisma.user.create({
 			data: { name: getRandomName(), customColor: getRandomColor() }
@@ -9,7 +8,7 @@ export function handleUserEvents(socket: Socket, io: Server) {
 		io.emit('set-user', user);
 	});
 
-	socket.on('update-user', async (data: { id: string; name: string }) => {
+	socket.on('update-user', async (data) => {
 		const { id, name } = data;
 		const updatedUser = await prisma.user.update({
 			where: { id: id },
@@ -19,7 +18,7 @@ export function handleUserEvents(socket: Socket, io: Server) {
 	});
 }
 
-function getRandomName(): string {
+function getRandomName() {
 	const adjectives = [
 		'Zádumčivý',
 		'Unavený',
@@ -42,7 +41,7 @@ function getRandomName(): string {
 	return `${randomAdjective} ${randomNoun}`;
 }
 
-function getRandomColor(): string {
+function getRandomColor() {
 	const colors = [
 		'#e2ffbf',
 		'#ffe5da',
@@ -63,6 +62,6 @@ function getRandomColor(): string {
 	return getRandomItem(colors);
 }
 
-function getRandomItem(options: string[]): string {
+function getRandomItem(options) {
 	return options[Math.floor(Math.random() * options.length)];
 }

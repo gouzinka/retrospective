@@ -1,7 +1,6 @@
 import prisma from '../db.js';
-import type { Socket, Server } from 'socket.io';
 
-export function handleActionPointEvents(socket: Socket, io: Server) {
+export function handleActionPointEvents(socket, io) {
 	socket.on('add-action-point-request', async (data) => {
 		const { description, retrospectiveId } = data;
 

@@ -1,11 +1,9 @@
-import type { Socket, Server } from 'socket.io';
+const timers = {};
+const timerIntervals = {};
+const duration = 300;
 
-const timers: Record<string, number> = {};
-const timerIntervals: Record<string, any> = {};
-const duration: number = 300;
-
-export function handleTimerEvents(socket: Socket, io: Server): void {
-	socket.on('start', (sessionId: string): void => {
+export function handleTimerEvents(socket, io) {
+	socket.on('start', (sessionId) => {
 		timers[sessionId] = timers[sessionId] ?? duration;
 		clearInterval(timerIntervals[sessionId]);
 		timerIntervals[sessionId] = setInterval(() => {
@@ -17,17 +15,17 @@ export function handleTimerEvents(socket: Socket, io: Server): void {
 		}, 1000);
 	});
 
-	socket.on('pause', (sessionId: string): void => {
+	socket.on('pause', (sessionId) => {
 		clearInterval(timerIntervals[sessionId]);
 	});
 
-	socket.on('reset', (sessionId: string): void => {
+	socket.on('reset', (sessionId) => {
 		clearInterval(timerIntervals[sessionId]);
 		timers[sessionId] = duration;
 		io.to(sessionId).emit('timer', timers[sessionId]);
 	});
 }
 
-export function getTimer(sessionId: string): number {
+export function getTimer(sessionId) {
 	return timers[sessionId] ?? duration;
 }
