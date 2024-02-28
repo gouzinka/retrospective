@@ -1,6 +1,6 @@
 import { Server } from 'socket.io';
 import { config } from 'dotenv';
-import { startTimer, pauseTimer, resetTimer, getTimer } from './src/utils/timerManager';
+import { getTimer, handleTimerEvents } from './socketHandlers/timerManagerHandlers';
 import { handleRetrospectiveEvents } from './socketHandlers/retrospectiveHandlers';
 import { handleActionPointEvents } from './socketHandlers/actionPointHandlers';
 import { handleCardEvents } from './socketHandlers/cardHandlers';
@@ -26,11 +26,7 @@ function injectSocketIO(server) {
 				socket.emit('timer', getTimer(sessionId));
 			});
 
-			// Timer
-			socket.on('start', (sessionId) => startTimer(io, sessionId));
-			socket.on('pause', (sessionId) => pauseTimer(sessionId));
-			socket.on('reset', (sessionId) => resetTimer(io, sessionId));
-
+			handleTimerEvents(socket, io);
 			handleUserEvents(socket, io);
 			handleCardEvents(socket, io);
 			handleActionPointEvents(socket, io);
