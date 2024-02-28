@@ -1,6 +1,6 @@
 import { Server } from 'socket.io';
 import { config } from 'dotenv';
-import { startTimer, pauseTimer, resetTimer, getTimer } from './src/utils/timerManager.js';
+import { startTimer, pauseTimer, resetTimer, getTimer } from './src/utils/timerManager';
 import { handleRetrospectiveEvents } from './socketHandlers/retrospectiveHandlers';
 import { handleActionPointEvents } from './socketHandlers/actionPointHandlers';
 import { handleCardEvents } from './socketHandlers/cardHandlers';
