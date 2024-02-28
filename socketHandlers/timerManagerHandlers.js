@@ -13,16 +13,19 @@ export function handleTimerEvents(socket, io) {
 			}
 			io.to(sessionId).emit('timer', timers[sessionId]);
 		}, 1000);
+        io.to(sessionId).emit('timer-state', 'running');
 	});
 
 	socket.on('pause', (sessionId) => {
 		clearInterval(timerIntervals[sessionId]);
+        io.to(sessionId).emit('timer-state', 'paused');
 	});
 
 	socket.on('reset', (sessionId) => {
 		clearInterval(timerIntervals[sessionId]);
 		timers[sessionId] = duration;
 		io.to(sessionId).emit('timer', timers[sessionId]);
+		io.to(sessionId).emit('timer-state', 'paused');
 	});
 }
 

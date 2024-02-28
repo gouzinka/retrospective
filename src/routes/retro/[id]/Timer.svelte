@@ -11,6 +11,9 @@
 		io.on('timer', (timer) => {
 			timerValue = timer;
 		});
+		io.on('timer-state', (state) => {
+			isRunning = state === 'running';
+		});
 	});
 
 	const toggleTimer = () => {
