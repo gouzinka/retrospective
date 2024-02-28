@@ -15,7 +15,7 @@ injectSocketIO(server);
 
 // SvelteKit handlers
 app.use(handler);
-const serverPort = process.env[`${envPrefix}SOCKET_IO_PORT`];
+const serverPort = process.env.PORT || process.env[`${envPrefix}SOCKET_IO_PORT`];
 server.listen(serverPort, () => {
 	console.log(`Server is listening on http://localhost:${serverPort}`);
 });
