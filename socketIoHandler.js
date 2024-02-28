@@ -1,10 +1,10 @@
 import { Server } from 'socket.io';
 import { config } from 'dotenv';
-import { getTimer, handleTimerEvents } from './socketHandlers/timerManagerHandlers';
-import { handleRetrospectiveEvents } from './socketHandlers/retrospectiveHandlers';
-import { handleActionPointEvents } from './socketHandlers/actionPointHandlers';
-import { handleCardEvents } from './socketHandlers/cardHandlers';
-import { handleUserEvents } from './socketHandlers/userHandlers';
+import { getTimer, handleTimerEvents } from './socketHandlers/timerManagerHandlers.js';
+import { handleRetrospectiveEvents } from './socketHandlers/retrospectiveHandlers.js';
+import { handleActionPointEvents } from './socketHandlers/actionPointHandlers.js';
+import { handleCardEvents } from './socketHandlers/cardHandlers.js';
+import { handleUserEvents } from './socketHandlers/userHandlers.js';
 
 config();
 const envPrefix = process.env.NODE_ENV === 'production' ? 'PROD_' : 'DEV_';
