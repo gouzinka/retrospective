@@ -6,7 +6,7 @@ export const csr = true;
 export async function load({ params }) {
 	const { id } = params;
 
-	io.emit('set-retrospective', id);
+	io.emit('set-retrospective-data', id);
 
 	if (typeof window !== 'undefined') {
 		await setCurrentUser();

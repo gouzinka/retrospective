@@ -56,11 +56,7 @@
 		const droppedCardId = e.detail.info.id;
 
 		if (cards.some((card) => card.id === droppedCardId)) {
-			io.emit('save-card', {
-				boardId,
-				cardId: droppedCardId,
-				isPublic: type === 'public' ? true : false
-			});
+			handlePublish(droppedCardId, type === 'public' ? true : false);
 		}
 	}
 
@@ -92,7 +88,7 @@
 					on:remove={() => handleRemove(card)}
 					on:publish={() => handlePublish(card.id, false)}
 					{card}
-					{color}
+					color={card?.author?.customColor || color}
 					isDefaultCard={false}
 				/>
 			</div>

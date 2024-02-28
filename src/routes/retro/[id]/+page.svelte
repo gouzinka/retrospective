@@ -6,7 +6,7 @@
 	import Board from './Board.svelte';
 	import Header from '../../Header.svelte';
 	import Timer from './Timer.svelte';
-	import { updateUser } from '../../../utils/userManager';
+	import { updateUserName } from '../../../utils/userManager';
 
 	let actionsVisible: boolean = false;
 	let isEditingName: boolean = false;
@@ -24,7 +24,7 @@
 	function handleOnBlur(): void {
 		isEditingName = false;
 		if ($currentUser?.id) {
-			updateUser($currentUser.id, userNameTitle);
+			updateUserName($retrospective.id, $currentUser.id, userNameTitle);
 		}
 	}
 </script>

@@ -41,7 +41,7 @@
 	}
 
 	async function saveActionPoint(description: string) {
-		io.emit('add-action-point-request', {
+		io.emit('add-action-point', {
 			description: description.trim(),
 			retrospectiveId: retroId
 		});

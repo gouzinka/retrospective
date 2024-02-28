@@ -5,7 +5,7 @@
 	import { currentUser } from '../stores/user.js';
 
 	onMount(() => {
-		io.on('retrospective-response', (retrospective) => {
+		io.on('retrospective-created', (retrospective) => {
 			goto(`/retro/${retrospective.id}`);
 		});
 
@@ -15,7 +15,7 @@
 	});
 
 	async function createNewRetro() {
-		io.emit('create-retrospective-request', {
+		io.emit('create-retrospective', {
 			title: 'New Retro',
 			userId: $currentUser?.id
 		});

@@ -4,6 +4,7 @@ export interface Card {
 	authorId: string;
 	isPublic: boolean;
 	boardId: string;
+	author?: User;
 }
 
 export interface User {

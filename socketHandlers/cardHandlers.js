@@ -67,6 +67,7 @@ export function handleCardEvents(socket, io) {
 				where: { id: cardId },
 				data: { isPublic }
 			});
+
 			io.to(`retro-${retroId}`).emit('card-publish-toggled', card);
 		} catch (error) {
 			console.error(error);

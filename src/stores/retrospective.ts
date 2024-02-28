@@ -74,7 +74,7 @@ io.on('card-publish-toggled', (card) => {
 	retrospective.update((retro) => toggleCardPublish(retro, card.id, card.isPublic));
 });
 
-io.on('retrospective-response', (newRetrospective) => {
+io.on('retrospective-created', (newRetrospective) => {
 	retrospective.set(newRetrospective);
 });
 

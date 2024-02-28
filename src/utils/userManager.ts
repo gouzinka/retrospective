@@ -45,6 +45,6 @@ export async function createUser() {
 	});
 }
 
-export async function updateUser(id: string, name: string) {
-	io.emit('update-user', { id, name });
+export async function updateUserName(retroId: string, id: string, name: string) {
+	io.emit('update-user', { retroId, id, name });
 }

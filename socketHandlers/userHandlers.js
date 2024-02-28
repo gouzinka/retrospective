@@ -5,7 +5,7 @@ export function handleUserEvents(socket, io) {
 		const user = await prisma.user.create({
 			data: { name: getRandomName(), customColor: getRandomColor() }
 		});
-		io.emit('set-user', user);
+		socket.emit('set-user', user);
 	});
 
 	socket.on('update-user', async (data) => {
@@ -14,7 +14,16 @@ export function handleUserEvents(socket, io) {
 			where: { id: id },
 			data: { name }
 		});
-		io.emit('set-user', updatedUser);
+		socket.emit('set-user', updatedUser);
+	});
+
+	socket.on('update-user-name', async (data) => {
+		const { retroId, id, name } = data;
+		const updatedUser = await prisma.user.update({
+			where: { id: id },
+			data: { name }
+		});
+		socket.to(`retro-${retroId}`).emit('set-user', updatedUser);
 	});
 }
 

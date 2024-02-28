@@ -5,7 +5,7 @@ export function handleRetrospectiveEvents(socket, io) {
 		socket.join(`retro-${retroId}`);
 	});
 
-	socket.on('create-retrospective-request', async (data) => {
+	socket.on('create-retrospective', async (data) => {
 		const { title, userId } = data;
 		try {
 			const creator = await prisma.user.findUnique({
@@ -56,13 +56,13 @@ export function handleRetrospectiveEvents(socket, io) {
 				}
 			});
 
-			io.emit('retrospective-response', retrospective);
+			socket.emit('retrospective-created', retrospective);
 		} catch (error) {
-			io.emit('retrospective-error', { error: error.message });
+			socket.emit('retrospective-error', { error: error.message });
 		}
 	});
 
-	socket.on('set-retrospective', async (retroId) => {
+	socket.on('set-retrospective-data', async (retroId) => {
 		try {
 			const retrospective = await prisma.retrospective.findUnique({
 				where: { id: retroId },
@@ -88,7 +88,7 @@ export function handleRetrospectiveEvents(socket, io) {
 				return;
 			}
 
-			socket.emit('retrospective-response', retrospective);
+			socket.emit('retrospective-created', retrospective);
 		} catch (error) {
 			console.error('Failed to fetch retrospective:', error);
 			socket.emit('retrospective-error', { error: error.message });
