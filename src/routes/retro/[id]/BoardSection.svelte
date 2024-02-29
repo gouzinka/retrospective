@@ -56,7 +56,12 @@
 		const droppedCardId = e.detail.info.id;
 
 		if (cards.some((card) => card.id === droppedCardId)) {
-			handlePublish(droppedCardId, type === 'public' ? true : false);
+			io.emit('save-card', {
+				retroId,
+				boardId,
+				cardId: droppedCardId,
+				isPublic: type === 'public' ? true : false
+			});
 		}
 	}
 
